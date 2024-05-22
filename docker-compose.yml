@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  api:
+    container_name: api
+    image: node:20
+    working_dir: /usr/src/node-api
+    restart: always
+    command: bash -c '
+      npm pkg set scripts.prepare=" " &&
+      npm install --omit=dev &&
+      npm pkg set scripts.prepare="husky" &&
+      npm run debug'
+    volumes:
+      - ./dist/:/usr/src/node-api/dist/
+      - ./package.json:/usr/src/node-api/package.json
+      - ./package-lock.json:/usr/src/node-api/package-lock.json
+    ports:
+      - "5050:5050"
+      - "9222:9222"
